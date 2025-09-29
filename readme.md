@@ -2,7 +2,7 @@
 
 # Indice
 
-- [O que é o FortiMonitor](#o-que-é-o-fortimonitor)
+- [Sobre](#sobre)
 - [Acesso a ferramenta](#acesso-a-ferramenta)
 - [Adicionando sua infraestrutuara ao FortiMonitor](#adicionando-sua-infraestrutra-ao-fortimonitor)
     - [FortiMonitor Agent](#fortimonitor-agent)
@@ -16,15 +16,25 @@
 - [Reports](#reports)
 
 
-## O que é o FortiMonitor
+## Sobre
 
-_O FortiMonitor é uma plataforma abrangente de monitoramento de experiência digital (DEM) baseada em SaaS que ajuda as organizações a modernizar suas ferramentas de monitoramento de desempenho. Ele fornece visibilidade de desempenho do aplicativo de endpoint e da experiência digital, não importa onde o usuário resida ou onde o aplicativo esteja hospedado._
+O FortiMonitor é uma plataforma **SaaS** (Software as a Service) de Monitoramento de Experiência Digital (DEM), desenvolvida pela Fortinet, que oferece uma visibilidade completa sobre o desempenho de aplicações e a experiência do usuário final.
 
-_trecho retirado da documentação oficial._
+### Pontos Chave:
+
+- **Foco no Usuário e Aplicação**: Ele rastreia e analisa o desempenho e a qualidade da experiência digital do ponto de vista do usuário.
+
+- **Modernização do Monitoramento**: Ajuda as organizações a substituírem ou complementarem ferramentas de monitoramento tradicionais, fornecendo uma visão única e unificada sobre a saúde e o desempenho de toda a jornada digital.
+
+- **Visibilidade de Ponta a Ponta**: Fornece métricas de desempenho de endpoints (dispositivos do usuário) até o servidor de aplicação, permitindo identificar rapidamente gargalos, seja na rede, no próprio aplicativo, ou no dispositivo do usuário.
+
+Em resumo, o FortiMonitor garante que as organizações possam manter a qualidade e a performance dos serviços digitais sobre a experiência real dos seus usuários.
 
 ## Acesso a ferramenta
 
 Para acessar a ferramenta você deverá entrar na <a href="https://www.forticloud.com/#/">FortiCloud</a>, realizar seu login(criar sua conta se necessário), ao entrar no ambiente, você deve ir pelo menu em **Services -> FortiMonitor**
+
+
 
 ![alt text](image-7.png)
 
@@ -33,100 +43,62 @@ Você será redirecionado para essa tela inicial da aplicação, **Infraestructu
 <img src="dashboard.png">
 
 
+Ou se preferir, indo direto a url de acesso <a href="https://fortimonitor.forticloud.com/">aqui</a>!
 
 ## Adicionando sua infraestrutra ao FortiMonitor
 
-Nesse trecho irei descrever os diversos métodos que podem ser utilizados para adicionar sua infraestrutu ao FortiMonitor. Cada método varia em termos de "_requisitos_" , é recomendavel que revise os métodos de instalação para determinar qual a melhor opção para o seu ambiente.
+Podemos adicionar diversos tipos de instâncias, iremos focar aqui em 2 tipos:
 
-![alt text](image-8.png)
+- Equipamentos FortiNet
+- Endpoints
 
+### Equipamentos FortiNet
 
-### FortiMonitor Agent
+Nesse contexto se enquadram :
 
-O FortiMonitor Agent, é indicado para monitoramento local(on-premise),seja em Desktops ou Laptops, ou até mesmo em servidores em Cloud, que permite o monitoramento de metricas como :
+- FortiGate
+- FortiSwitch
+- FortiAP
 
-- Recurso do servidor
-- Processos
-- Serviços
+Nesse cenário, sua adição é feito através do FortiFabric, onde adicionamos o FortiGate via Fabric
 
-Podendo também monitorar aplicações como :
+![alt text](image-22.png)
+![alt text](image-23.png)
+![alt text](image-24.png)
 
-- Apache
-- SQL Server
-- Serviços de cache
+Deve ser informado o IP/FQDN do FortiGate que será o Fabric Root, a porta 8013 já esta implicita, ou seja, aberta, informe o Serial Number do equipamento.
+Escolha um grupo já criado, caso não selecionado, criará um grupo default.
 
-O FortiMonitor é compativel com Sistemas :
+**Obs.: Importante informar que para que funcione, é necessário também que exista uma policy permintindo a comunicação do equipamento com o FortiMonitor.**
 
-- Linux
-- Unix
-- Windows
+#### OnSight vCollector
 
-Para mais informações sobre instalação, segue abaixo os links oficiais:
-<ul>
-<li><a href="">FortiMonitor Agent</a></li>
-<li><a href="">Install the FortiMonitor Agent</a></li>
-<li><a href="">Automate the FortiMonitor Agent installation</a></li>
-</ul>
+O OnSight vCollector, é uma forma de adicionar os equipamentos via Fabric, mas sem expor diretamente na internet. 
 
-
-### OnSight vCollector
-
-O OnSight vCollector, é uma aplicação que roda em Linux, podendo ser utilizada uma Imagem já pronta, instalar de modo standalone ou utilizar Docker. Sua funcionalidade é fazer verificações em rede, sondagens SNMP e fornecer um monitoramento mais aprofundado em equipamentos de rede como :
+É uma aplicação que roda em Linux, podendo ser utilizada uma Imagem já pronta, instalar de modo standalone ou utilizar Docker. Sua funcionalidade é fazer verificações em rede, sondagens SNMP e fornecer um monitoramento mais aprofundado em equipamentos de rede como :
 
 - Firewalls
 - Switchs
 - Roteadores
 
-O recurso minimo para fazer o deploy e utilização do OnSight vCollector, é :
 
-- 1 Core
-- 1 GB RAM
+### Endpoints
 
-_Se feita em instância EC2(AWS), equivale á uma t3.medium ._
+Por endpoints, vamos entender que se trata de equipamentos como Desktops ou Notebooks, onde é possivel instalar o FortiMonitor Agent, compativel com Sistemas :
 
+- Linux
+- Mac OS
+- Windows
 
-#### Adicionar um instência básica
+Onde nesses endpoints podemos aplicar auto healing, através de **CounterMeasures**, que são respostas(ações) automaizadas a incidentes acionados em sua infraestrutura. Podendo ser simples como anexar a saida de um _top_ ao seu incidente, afim de identificar alto consumo de CPU por exemplo, ou coisas mais complexas como reiniciar um serviços ou reiniciar o endpoint.
 
-Pode ter adicionado sites, endpoints, servidores, serviços, e qualquer outra coisa via FQDN ou IP, segue os passos :
+- Document Library <a href="https://docs.fortinet.com/document/fortimonitor/25.3.0/user-guide/645678/countermeasures"> saiba mais!</a>
 
-- 1 - Esteja logado no FortiMonitor Control Panel.
-- 2 - Acesse o menu lateral ao esquerda, no final da tela, clique em **Add**
-
-
-![alt text](image-1.png)
-
-_Você também pode ir em **Monitoring -> Instances** ._
-
-Para o nosso principal cenário, iremos utilizar **Fabric**, que nos permite a integração nativa com equipamentos FortiNet, que tenha o recurso **Security Fabric Connection** habilitado.
-
-![alt text](image-9.png)
-
-
-![alt text](image-10.png)
-
-Note que para cada tipo de conexão, é exigido algum requisito como :
-
-- Versão do FortiOS
-- Security Fabric Connection habilitado
-- Porta 8013 acessivel pela WAN ou LAN
-
-Uma vez escolhido a opção desejava, na tela seguinte teremos que passar algumas informações do equipamento a ser monitorado :
-
-- IP ou FQDN
-- Porta de gerenciamento
-- Serial Number do equipamento
-- Escolher um grupo onde esse equipamento ficará, para facilitar a gestão e troubleshootin se necessário.
-
-![alt text](image-5.png)
-
-Para encontrar sua instância, basta ir em **Monitoring -> Instances -> Clicar no icone referente uma arvore de arquivos, como segue o presente :
-
-![alt text](image-11.png)
-
-Segue a tela com um FortiGate adicionado:
-
-![alt text](image-13.png)
-
+Para mais informações sobre instalação, segue abaixo os links oficiais:
+<ul>
+<li><a href="https://docs.fortinet.com/document/fortimonitor/25.3.0/user-guide/916257/fortimonitor-agent">FortiMonitor Agent</a></li>
+<li><a href="https://docs.fortinet.com/document/fortimonitor/25.3.0/user-guide/487136/install-the-fortimonitor-agent">Install the FortiMonitor Agent</a></li>
+</ul>
 
 
 ## Alert Timeline
